@@ -15,6 +15,7 @@ import type { EntityManager, FilterQuery } from '@mikro-orm/postgresql'
 import { roleCrudEvents, roleCrudIndexer } from '@open-mercato/core/modules/auth/commands/roles'
 import { escapeLikePattern } from '@open-mercato/shared/lib/db/escapeLikePattern'
 import { assertActorCanModifySuperAdminRoleTarget } from '@open-mercato/core/modules/auth/lib/grantChecks'
+import { enforceRoleTenantAccess } from '@open-mercato/core/modules/auth/lib/roleTenantGuard'
 import type { RbacService } from '@open-mercato/core/modules/auth/services/rbacService'
 
 const querySchema = z.object({
@@ -84,7 +85,8 @@ const crud = makeCrudRoute<CrudInput, CrudInput, Record<string, unknown>>({
     create: {
       commandId: 'auth.roles.create',
       schema: rawBodySchema,
-      mapInput: ({ parsed }) => parsed,
+      mapInput: async ({ parsed, ctx }) =>
+        enforceRoleTenantAccess('create', parsed, { auth: ctx.auth, container: ctx.container }),
       response: ({ result }) => ({ id: String(result.id) }),
       status: 201,
     },
@@ -95,12 +97,14 @@ const crud = makeCrudRoute<CrudInput, CrudInput, Record<string, unknown>>({
         if (ctx.request && typeof parsed.id === 'string' && parsed.id.length) {
           await assertCanModifySuperAdminRole(ctx.request, parsed.id)
         }
-        return parsed
+        return enforceRoleTenantAccess('update', parsed, { auth: ctx.auth, container: ctx.container })
       },
       response: () => ({ ok: true }),
     },
     delete: {
       commandId: 'auth.roles.delete',
+      mapInput: async ({ parsed, ctx }) =>
+        enforceRoleTenantAccess('delete', parsed, { auth: ctx.auth, container: ctx.container }),
       response: () => ({ ok: true }),
     },
   },
@@ -291,7 +295,7 @@ export const openApi: OpenApiRouteDoc = {
     },
     POST: {
       summary: 'Create role',
-      description: 'Creates a new role for the current tenant or globally when `tenantId` is omitted.',
+      description: 'Creates a new role anchored to the caller\'s tenant. Non-superadmins cannot target another tenant; supplying a foreign `tenantId` is rejected.',
       requestBody: {
         contentType: 'application/json',
         schema: roleCreateSchema,
