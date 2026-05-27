@@ -3,7 +3,7 @@ import { registerCommand } from '@open-mercato/shared/lib/commands'
 import { CrudHttpError } from '@open-mercato/shared/lib/crud/errors'
 import { resolveTranslations } from '@open-mercato/shared/lib/i18n/server'
 import { enforcementPolicySchema } from '../data/validators'
-import type { MfaEnforcementService } from '../services/MfaEnforcementService'
+import type { MfaEnforcementAuthScope, MfaEnforcementService } from '../services/MfaEnforcementService'
 
 export const commandId = 'security.enforcement.create'
 
@@ -34,8 +34,13 @@ registerCommand({
     }
 
     const enforcementService = ctx.container.resolve<MfaEnforcementService>('mfaEnforcementService')
+    const scope: MfaEnforcementAuthScope = {
+      tenantId: (ctx.auth.tenantId as string | null | undefined) ?? null,
+      organizationId: (ctx.auth.orgId as string | null | undefined) ?? null,
+      isSuperAdmin: ctx.auth.isSuperAdmin === true,
+    }
     try {
-      const policy = await enforcementService.createPolicy(parsed.data, ctx.auth.sub)
+      const policy = await enforcementService.createPolicy(parsed.data, ctx.auth.sub, scope)
       return { id: policy.id }
     } catch (error) {
       if (isEnforcementServiceError(error)) {
