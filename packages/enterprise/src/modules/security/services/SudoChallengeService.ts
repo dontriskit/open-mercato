@@ -209,13 +209,22 @@ export class SudoChallengeService {
   async prepare(
     sessionId: string,
     methodType: string,
+    options: { expectedUserId?: string } = {},
     request?: Request,
   ): Promise<{ clientData?: Record<string, unknown> }> {
     const session = await this.getPendingSession(sessionId)
+    if (options.expectedUserId && session.userId !== options.expectedUserId) {
+      throw new SudoChallengeServiceError('Sudo challenge user mismatch', 403)
+    }
     if (session.challengeMethod !== 'mfa') {
       throw new SudoChallengeServiceError('This sudo session does not require MFA', 400)
     }
-    return this.mfaVerificationService.prepareChallenge(session.sessionToken, methodType, { request })
+    return this.mfaVerificationService.prepareChallenge(
+      session.sessionToken,
+      methodType,
+      { request },
+      { userId: session.userId },
+    )
   }
 
   async verify(
@@ -257,7 +266,13 @@ export class SudoChallengeService {
       verified = await this.passwordService.verifyPassword(session.userId, password)
       methodUsed = SudoChallengeMethodUsed.PASSWORD
     } else {
-      verified = await this.mfaVerificationService.verifyChallenge(session.sessionToken, methodType, payload, { request })
+      verified = await this.mfaVerificationService.verifyChallenge(
+        session.sessionToken,
+        methodType,
+        payload,
+        { request },
+        { userId: session.userId },
+      )
     }
 
     if (!verified) {
