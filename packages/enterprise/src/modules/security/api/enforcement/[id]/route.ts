@@ -92,6 +92,7 @@ export const openApi = buildSecurityOpenApi({
       errors: [
         { status: 400, description: 'Invalid input', schema: securityErrorSchema },
         { status: 401, description: 'Unauthorized', schema: securityErrorSchema },
+        { status: 403, description: 'Insufficient scope for enforcement policy', schema: securityErrorSchema },
         { status: 404, description: 'Policy not found', schema: securityErrorSchema },
         { status: 409, description: 'Conflict', schema: securityErrorSchema },
       ],
