@@ -63,6 +63,8 @@ export const moduleOverrideExamples: ModuleOverrides = {
 }
 
 export const enabledModules: ModuleEntry[] = [
+  // OpenCare — care-provider customization layer (lives in apps/mercato/src/modules/opencare)
+  { id: 'opencare', from: '@app' },
   { id: 'dashboards', from: '@open-mercato/core' },
   { id: 'auth', from: '@open-mercato/core' },
   { id: 'directory', from: '@open-mercato/core' },
