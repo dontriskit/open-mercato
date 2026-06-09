@@ -1,4 +1,9 @@
 import './commands/care_recipients'
+import './commands/care_settings'
+import './commands/care_episodes'
+import './commands/care_notes'
+import './commands/care_documents'
+import './commands/consent_records'
 import type { ModuleInfo } from '@open-mercato/shared/modules/registry'
 
 export const metadata: ModuleInfo = {
