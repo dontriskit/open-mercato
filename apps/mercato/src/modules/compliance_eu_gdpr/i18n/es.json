@@ -1,0 +1,7 @@
+{
+  "compliance.eu_gdpr.pack.label": "Union Europea (RGPD)",
+  "compliance.consent.data_processing": "Tratamiento de datos personales",
+  "compliance.consent.health_data_processing": "Tratamiento de datos de salud (art. 9)",
+  "compliance.consent.marketing": "Comunicaciones de marketing",
+  "compliance.field.gdpr_legal_basis.required": "Base juridica requerida"
+}

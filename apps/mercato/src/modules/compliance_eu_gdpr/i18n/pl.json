@@ -1,0 +1,8 @@
+{
+  "compliance.eu_gdpr.pack.label": "Unia Europejska (RODO)",
+  "compliance.consent.data_processing": "Przetwarzanie danych osobowych",
+  "compliance.consent.health_data_processing": "Przetwarzanie danych o zdrowiu (art. 9)",
+  "compliance.consent.marketing": "Komunikacja marketingowa",
+  "compliance.field.gdpr_legal_basis.required": "Wymagana podstawa prawna przetwarzania",
+  "compliance.retention.care_note.7y": "Notatki opiekuncze przechowywane ok. 7 lat (ograniczenie przechowywania RODO)"
+}

@@ -14,8 +14,37 @@ import type { EntityManager, FilterQuery } from '@mikro-orm/postgresql'
 import { resolveTranslations } from '@open-mercato/shared/lib/i18n/server'
 import { CareRecipient } from '../data/entities'
 import { careRecipientCreateSchema, careRecipientUpdateSchema } from '../data/validators'
+import type { ComplianceKitService } from '../../compliance_kit/lib/compliance-kit-service'
+import { enforceMergedRules } from '../../compliance_kit/lib/enforce'
 
 const ENTITY_ID = 'opencare:care_recipient' as const
+
+/**
+ * Anti-bypass enforcement (OPENCARE_PLAN.md §3.6 #1): the CRUD mutation guard
+ * only fires on the HTTP route path. Direct command / bulk-import callers must
+ * run the SAME required-field + validation rules. We resolve complianceKitService
+ * from the command container; if it (or the tenant) is unavailable we fail open
+ * so unrelated callers are not blocked by a wiring issue.
+ */
+async function enforceCompliance(
+  ctx: CommandRuntimeContext,
+  record: Record<string, unknown>,
+  operation: 'create' | 'update' = 'create',
+): Promise<void> {
+  const tenantId = ctx.auth?.tenantId ?? null
+  if (!tenantId) return
+  let service: ComplianceKitService | null = null
+  try {
+    service = ctx.container.resolve('complianceKitService') as ComplianceKitService
+  } catch {
+    return
+  }
+  const rules = await service.getMergedRules(tenantId)
+  const result = enforceMergedRules(ENTITY_ID, null, record, rules, 'en', { operation })
+  if (!result.ok) {
+    throw new CrudHttpError(result.failure.status, { error: result.failure.message })
+  }
+}
 
 type SerializedCareRecipient = {
   id: string
@@ -126,6 +155,7 @@ const createCommand: CommandHandler<Record<string, unknown>, CareRecipient> = {
   async execute(rawInput, ctx) {
     const parsed = careRecipientCreateSchema.parse(rawInput)
     const scope = ensureScope(ctx)
+    await enforceCompliance(ctx, parsed as unknown as Record<string, unknown>)
     const de = ctx.container.resolve('dataEngine') as DataEngine
     const entity = await de.createOrmEntity({
       entity: CareRecipient,
@@ -209,6 +239,7 @@ const updateCommand: CommandHandler<Record<string, unknown>, CareRecipient> = {
   async execute(rawInput, ctx) {
     const parsed = careRecipientUpdateSchema.parse(rawInput)
     const scope = ensureScope(ctx)
+    await enforceCompliance(ctx, parsed as unknown as Record<string, unknown>, 'update')
     const de = ctx.container.resolve('dataEngine') as DataEngine
     const entity = await de.updateOrmEntity({
       entity: CareRecipient,

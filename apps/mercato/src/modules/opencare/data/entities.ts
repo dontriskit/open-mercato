@@ -18,11 +18,20 @@ export class CareRecipient {
   @Property({ name: 'national_id', type: 'text', nullable: true })
   nationalId?: string | null
 
+  @Property({ name: 'national_id_hash', type: 'text', nullable: true })
+  nationalIdHash?: string | null
+
   @Property({ name: 'primary_email', type: 'text', nullable: true })
   primaryEmail?: string | null
 
+  @Property({ name: 'primary_email_hash', type: 'text', nullable: true })
+  primaryEmailHash?: string | null
+
   @Property({ name: 'phone', type: 'text', nullable: true })
   phone?: string | null
+
+  @Property({ name: 'phone_hash', type: 'text', nullable: true })
+  phoneHash?: string | null
 
   @Property({ name: 'date_of_birth', type: 'date', nullable: true })
   dateOfBirth?: string | null

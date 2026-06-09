@@ -1,0 +1,8 @@
+{
+  "compliance.eu_gdpr.pack.label": "European Union (GDPR)",
+  "compliance.consent.data_processing": "Personal data processing",
+  "compliance.consent.health_data_processing": "Health data processing (Art. 9)",
+  "compliance.consent.marketing": "Marketing communications",
+  "compliance.field.gdpr_legal_basis.required": "Legal basis for processing is required",
+  "compliance.retention.care_note.7y": "Care notes retained ~7 years (GDPR storage limitation)"
+}

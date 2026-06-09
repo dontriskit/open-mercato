@@ -1,0 +1,7 @@
+{
+  "compliance.eu_gdpr.pack.label": "Europaeische Union (DSGVO)",
+  "compliance.consent.data_processing": "Verarbeitung personenbezogener Daten",
+  "compliance.consent.health_data_processing": "Verarbeitung von Gesundheitsdaten (Art. 9)",
+  "compliance.consent.marketing": "Marketingkommunikation",
+  "compliance.field.gdpr_legal_basis.required": "Rechtsgrundlage erforderlich"
+}
