@@ -1,0 +1,7 @@
+{
+  "compliance.pl_rodo.pack.label": "Polska (RODO)",
+  "compliance.consent.medical_record_access": "Dostep do dokumentacji medycznej",
+  "compliance.field.national_id.required": "PESEL jest wymagany",
+  "compliance.validation.pesel.invalid": "Nieprawidlowa suma kontrolna PESEL",
+  "compliance.retention.note.20y": "Dokumentacja medyczna przechowywana 20 lat (art. 29 ustawy o prawach pacjenta)"
+}

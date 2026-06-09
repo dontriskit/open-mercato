@@ -1,0 +1,7 @@
+{
+  "compliance.pl_rodo.pack.label": "Polen (RODO)",
+  "compliance.consent.medical_record_access": "Zugriff auf Patientenakte",
+  "compliance.field.national_id.required": "PESEL erforderlich",
+  "compliance.validation.pesel.invalid": "Ungueltige PESEL-Pruefsumme",
+  "compliance.retention.note.20y": "Patientenakten 20 Jahre aufbewahrt (Art. 29 des Patientenrechtegesetzes)"
+}

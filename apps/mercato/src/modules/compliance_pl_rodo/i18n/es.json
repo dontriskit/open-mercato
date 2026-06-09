@@ -1,0 +1,7 @@
+{
+  "compliance.pl_rodo.pack.label": "Polonia (RODO)",
+  "compliance.consent.medical_record_access": "Acceso al historial medico",
+  "compliance.field.national_id.required": "PESEL requerido",
+  "compliance.validation.pesel.invalid": "Suma de control PESEL invalida",
+  "compliance.retention.note.20y": "Historiales medicos conservados 20 anos (art. 29 de la Ley de Derechos del Paciente)"
+}

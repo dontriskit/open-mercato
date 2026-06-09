@@ -67,6 +67,7 @@ export const enabledModules: ModuleEntry[] = [
   { id: 'opencare', from: '@app' },
   { id: 'compliance_kit', from: '@app' },
   { id: 'compliance_eu_gdpr', from: '@app' },
+  { id: 'compliance_pl_rodo', from: '@app' },
   { id: 'dashboards', from: '@open-mercato/core' },
   { id: 'auth', from: '@open-mercato/core' },
   { id: 'directory', from: '@open-mercato/core' },
